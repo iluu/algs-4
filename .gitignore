@@ -1,0 +1,8 @@
+# Checkstyle and fingbugs
+checkstyle*
+findbugs*
+bin/
+
+# Inj config
+*.iml
+.idea/
