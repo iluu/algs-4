@@ -6,3 +6,4 @@ bin/
 # Inj config
 *.iml
 .idea/
+out/
