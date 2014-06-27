@@ -10,7 +10,7 @@ public class Percolation {
      */
     public Percolation(int N) {
         dimenN = N;
-        openSites = new boolean[(N+1) * (N+1)];
+        openSites = new boolean[(N + 1) * (N + 1)];
         quickUnion = new WeightedQuickUnionUF((N + 1) * (N + 1));
     }
 
@@ -22,7 +22,7 @@ public class Percolation {
      */
     public void open(int x, int y) {
         if (!isValid(x, y)) {
-            throw new IndexOutOfBoundsException(x + " or " + y + " exceeds bounds 1 < " + dimenN);
+            throw new IndexOutOfBoundsException(x + ", or " + y + " > " + dimenN);
         }
 
         int siteId = xyTo1D(x, y);
@@ -32,24 +32,17 @@ public class Percolation {
             quickUnion.union(siteId, 0);
         }
 
-        if(isLastRow(x)){
-            percolates = quickUnion.connected(siteId, 0);
-        }
-
         // neighbours
-        fillNeighbour(siteId, x-1, y);
-        fillNeighbour(siteId, x+1, y);
+        fillNeighbour(siteId, x - 1, y);
+        fillNeighbour(siteId, x + 1, y);
         fillNeighbour(siteId, x, y + 1);
         fillNeighbour(siteId, x, y - 1);
     }
 
-    private void fillNeighbour(int siteId, int newX, int newY){
+    private void fillNeighbour(int siteId, int newX, int newY) {
         if (isValid(newX, newY) && isOpen(newX, newY)) {
             int newSiteId = xyTo1D(newX, newY);
             quickUnion.union(newSiteId, siteId);
-            if(isLastRow(newX)){
-                percolates = quickUnion.connected(newSiteId, 0);
-            }
         }
     }
 
@@ -57,12 +50,8 @@ public class Percolation {
         return x == 1;
     }
 
-    private boolean isLastRow(int x) {
-        return x == dimenN;
-    }
-
     protected int xyTo1D(int x, int y) {
-        int id= (x - 1) + (y - 1) * dimenN + 1;
+        int id = (x - 1) + (y - 1) * dimenN + 1;
         //System.out.println("SideID: " + id + "(x: " + x + ", y: " +y + ")" );
         return id;
     }
@@ -91,7 +80,12 @@ public class Percolation {
      * @return true if system percolates, false otherwise
      */
     public boolean percolates() {
-        return percolates;
+        for (int y = 1; y <= dimenN; y++) {
+            if (quickUnion.connected(xyTo1D(dimenN, y), 0)) {
+                return true;
+            }
+        }
+        return false;
     }
 
 }
