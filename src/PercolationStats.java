@@ -58,8 +58,6 @@ public class PercolationStats {
         PercolationStats stats = new PercolationStats(N, T);
         stats.runExperiments();
 
-        StdOut.printf("dimentions              %d\n", N);
-        StdOut.printf("experiments             %d\n", T);
         StdOut.printf("mean                    %.20f\n", stats.mean());
         StdOut.printf("stddev                  %.20f\n", stats.stddev());
         StdOut.printf("95%% confidence interval %.20f, %.20f",

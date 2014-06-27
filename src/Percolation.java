@@ -1,6 +1,5 @@
 public class Percolation {
 
-    private boolean percolates;
     private int dimenN;
     private boolean[] openSites;
     private WeightedQuickUnionUF quickUnion;
@@ -51,9 +50,7 @@ public class Percolation {
     }
 
     protected int xyTo1D(int x, int y) {
-        int id = (x - 1) + (y - 1) * dimenN + 1;
-        //System.out.println("SideID: " + id + "(x: " + x + ", y: " +y + ")" );
-        return id;
+        return (x - 1) + (y - 1) * dimenN + 1;
     }
 
     private boolean isValid(int x, int y) {
