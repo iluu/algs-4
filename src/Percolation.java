@@ -35,6 +35,10 @@ public class Percolation {
             quickUnion.union(siteId, 0);
         }
 
+        if (isLastRow(x)) {
+            quickUnion.union(siteId, (dimenN * dimenN) + 1);
+        }
+
         // neighbours
         fillNeighbour(siteId, x - 1, y);
         fillNeighbour(siteId, x + 1, y);
@@ -47,6 +51,10 @@ public class Percolation {
             int newSiteId = xyTo1D(newX, newY);
             quickUnion.union(newSiteId, siteId);
         }
+    }
+
+    private boolean isLastRow(int x) {
+        return x == dimenN;
     }
 
     private boolean isFirstRow(int x) {
@@ -89,12 +97,7 @@ public class Percolation {
      * @return true if system percolates, false otherwise
      */
     public boolean percolates() {
-        for (int y = 1; y <= dimenN; y++) {
-            if (quickUnion.connected(xyTo1D(dimenN, y), 0)) {
-                return true;
-            }
-        }
-        return false;
+        return quickUnion.connected(0, (dimenN * dimenN) + 1);
     }
 
 }

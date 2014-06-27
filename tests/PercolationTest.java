@@ -1,5 +1,6 @@
 import org.junit.Test;
 
+import static junit.framework.TestCase.assertFalse;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertTrue;
@@ -13,6 +14,16 @@ public class PercolationTest {
 
         percolation.open(1, 1);
         assertThat(percolation.isOpen(1, 1), is(true));
+    }
+
+    @Test
+    public void shouldNotPercolate() throws Exception {
+        Percolation percolation = new Percolation(2);
+        assertFalse(percolation.percolates());
+
+        percolation.open(2,2);
+        assertFalse(percolation.isFull(2,2));
+        assertFalse(percolation.percolates());
     }
 
     @Test

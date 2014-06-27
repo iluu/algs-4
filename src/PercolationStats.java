@@ -39,14 +39,14 @@ public class PercolationStats {
      * @return lower bound of the 95% confidence interval
      */
     public double confidenceLo() {
-        return mean() - 1.96 * stddev() / Math.sqrt(dimen);
+        return mean() - 1.96 * stddev() / Math.sqrt(experiments);
     }
 
     /**
      * @return upper bound of the 95% confidence interval
      */
     public double confidenceHi() {
-        return mean() + 1.96 * stddev() / Math.sqrt(dimen);
+        return mean() + 1.96 * stddev() / Math.sqrt(experiments);
     }
 
     /**
