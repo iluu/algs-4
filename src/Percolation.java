@@ -8,6 +8,10 @@ public class Percolation {
      * Create N by B grid, with all sites blocked
      */
     public Percolation(int N) {
+        if (N <= 0) {
+            throw new IllegalArgumentException("N must be > 0");
+        }
+
         dimenN = N;
         openSites = new boolean[(N + 1) * (N + 1)];
         quickUnion = new WeightedQuickUnionUF((N + 1) * (N + 1));
@@ -49,7 +53,7 @@ public class Percolation {
         return x == 1;
     }
 
-    protected int xyTo1D(int x, int y) {
+    private int xyTo1D(int x, int y) {
         return (x - 1) + (y - 1) * dimenN + 1;
     }
 
@@ -61,6 +65,10 @@ public class Percolation {
      * @return true if site at x, y is open, false otherwise
      */
     public boolean isOpen(int x, int y) {
+        if (!isValid(x, y)) {
+            throw new IndexOutOfBoundsException(x + ", or " + y + " > " + dimenN);
+        }
+
         return openSites[xyTo1D(x, y)];
     }
 
@@ -70,6 +78,10 @@ public class Percolation {
      * @return true if site at i, j is full, false otherwise
      */
     public boolean isFull(int x, int y) {
+        if (!isValid(x, y)) {
+            throw new IndexOutOfBoundsException(x + ", or " + y + " > " + dimenN);
+        }
+
         return quickUnion.connected(xyTo1D(x, y), 0);
     }
 

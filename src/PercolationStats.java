@@ -11,9 +11,14 @@ public class PercolationStats {
      * @param T number of experiments to run
      */
     public PercolationStats(int N, int T) {
+        if (N <= 0 || T <= 0) {
+            throw new IllegalArgumentException("Try again: N <= 0 and T <= 0");
+        }
+
         dimen = N;
         experiments = T;
         results = new double[T];
+        runExperiments();
     }
 
     /**
@@ -51,12 +56,7 @@ public class PercolationStats {
         int N = Integer.parseInt(args[0]);
         int T = Integer.parseInt(args[1]);
 
-        if (N <= 0 || T <= 0) {
-            throw new IllegalArgumentException("Try again: N <= 0 and T <= 0");
-        }
-
         PercolationStats stats = new PercolationStats(N, T);
-        stats.runExperiments();
 
         StdOut.printf("mean                    %.20f\n", stats.mean());
         StdOut.printf("stddev                  %.20f\n", stats.stddev());
