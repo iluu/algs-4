@@ -1,7 +1,9 @@
 public class Percolation {
 
+    private boolean percolates;
     private int dimenN;
     private boolean[] openSites;
+    private boolean[] connectedToBottom;
     private WeightedQuickUnionUF quickUnion;
 
     /**
@@ -15,6 +17,7 @@ public class Percolation {
         dimenN = N;
         openSites = new boolean[(N + 1) * (N + 1)];
         quickUnion = new WeightedQuickUnionUF((N + 1) * (N + 1));
+        connectedToBottom = new boolean[(N + 1) * (N + 1)];
     }
 
     /**
@@ -35,22 +38,39 @@ public class Percolation {
             quickUnion.union(siteId, 0);
         }
 
-        if (isLastRow(x)) {
-            quickUnion.union(siteId, (dimenN * dimenN) + 1);
-        }
-
         // neighbours
         fillNeighbour(siteId, x - 1, y);
         fillNeighbour(siteId, x + 1, y);
         fillNeighbour(siteId, x, y + 1);
         fillNeighbour(siteId, x, y - 1);
+
+        if (isLastRow(x)) {
+            connectToBottom(siteId);
+        }
+
+        if (isConnectedToBottom(siteId)) {
+            percolates = quickUnion.connected(siteId, 0);
+        }
     }
 
     private void fillNeighbour(int siteId, int newX, int newY) {
         if (isValid(newX, newY) && isOpen(newX, newY)) {
             int newSiteId = xyTo1D(newX, newY);
+
+            if (isConnectedToBottom(newSiteId)) {
+                connectToBottom(siteId);
+            }
+
             quickUnion.union(newSiteId, siteId);
         }
+    }
+
+    private void connectToBottom(int siteId) {
+        connectedToBottom[quickUnion.find(siteId)] = true;
+    }
+
+    private boolean isConnectedToBottom(int siteId) {
+        return connectedToBottom[quickUnion.find(siteId)];
     }
 
     private boolean isLastRow(int x) {
@@ -97,7 +117,6 @@ public class Percolation {
      * @return true if system percolates, false otherwise
      */
     public boolean percolates() {
-        return quickUnion.connected(0, (dimenN * dimenN) + 1);
+        return percolates;
     }
-
 }

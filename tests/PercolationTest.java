@@ -21,8 +21,8 @@ public class PercolationTest {
         Percolation percolation = new Percolation(2);
         assertFalse(percolation.percolates());
 
-        percolation.open(2,2);
-        assertFalse(percolation.isFull(2,2));
+        percolation.open(2, 2);
+        assertFalse(percolation.isFull(2, 2));
         assertFalse(percolation.percolates());
     }
 
@@ -59,10 +59,36 @@ public class PercolationTest {
         Percolation percolation = new Percolation(3);
 
         percolation.open(1, 3);
+        percolation.open(3, 3);
+        percolation.open(2, 3);
+
+        assertTrue(percolation.percolates());
+    }
+
+    @Test
+    public void shouldPropagatePercolationForBigDimens() throws Exception {
+        Percolation percolation = new Percolation(5);
+
+        percolation.open(4, 5);
+        percolation.open(5, 5);
+        percolation.open(2, 5);
+        assertFalse(percolation.percolates());
+
+        percolation.open(1, 5);
+        percolation.open(3, 5);
+        assertTrue(percolation.percolates());
+    }
+
+    @Test
+    public void shouldNotBackwash() throws Exception {
+        Percolation percolation = new Percolation(3);
+
+        percolation.open(1, 3);
         percolation.open(2, 3);
         percolation.open(3, 3);
 
-        assertTrue(percolation.percolates());
+        percolation.open(3, 1);
+        assertFalse(percolation.isFull(3, 1));
     }
 
     @Test(expected = IndexOutOfBoundsException.class)
