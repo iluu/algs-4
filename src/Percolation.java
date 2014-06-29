@@ -48,7 +48,7 @@ public class Percolation {
             connectToBottom(siteId);
         }
 
-        if (isConnectedToBottom(siteId)) {
+        if (isConnectedToBottom(siteId) && !percolates) {
             percolates = quickUnion.connected(siteId, 0);
         }
     }
