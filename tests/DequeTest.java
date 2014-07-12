@@ -111,6 +111,7 @@ public class DequeTest {
         deque.removeLast();
 
         assertThat(toList(deque), is(Arrays.asList(3)));
+        assertThat(deque.size(), is(1));
     }
 
     private Deque<Integer> fromList(List<Integer> list){

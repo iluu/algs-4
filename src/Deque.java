@@ -81,6 +81,7 @@ public class Deque<Item> implements Iterable<Item> {
         Node toRemove = first.after;
         first.after = toRemove.after;
         first.after.before = first;
+        size--;
         return toRemove.value;
     }
 
@@ -95,6 +96,7 @@ public class Deque<Item> implements Iterable<Item> {
         Node toRemove = last.before;
         last.before = toRemove.before;
         last.before.after = last;
+        size--;
         return toRemove.value;
     }
 
