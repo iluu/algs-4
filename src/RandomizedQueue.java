@@ -97,7 +97,7 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
             throw new NoSuchElementException();
         }
 
-        int position = StdRandom.uniform(size);
+        int position = StdRandom.uniform(1, size + 1);
         return getNodeAtPosition(position).value;
     }
 

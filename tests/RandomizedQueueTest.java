@@ -54,6 +54,7 @@ public class RandomizedQueueTest {
     public void isEmptyIsFalseForNotEmptyQueue() {
         queue.enqueue(1);
         assertFalse(queue.isEmpty());
+        assertThat(toList(queue), hasItem(1));
     }
 
     @Test
@@ -81,6 +82,14 @@ public class RandomizedQueueTest {
 
         assertThat(queue.size(), is(5));
         assertThat(toList(queue), hasItem(sample));
+    }
+
+    @Test
+    public void sampleFromOneItemQueueReturnsValidItem() {
+        RandomizedQueue<Integer> queue = fromList(Arrays.asList(1));
+        Integer sample = queue.sample();
+
+        assertThat(sample, is(1));
     }
 
     private RandomizedQueue<Integer> fromList(List<Integer> list) {
