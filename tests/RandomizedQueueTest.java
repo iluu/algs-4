@@ -92,6 +92,20 @@ public class RandomizedQueueTest {
         assertThat(sample, is(1));
     }
 
+    @Test
+    public void twoIteratorsHaveDifferentOutputs() {
+        RandomizedQueue<Integer> q = fromList(Arrays.asList(1, 2, 3, 4, 5));
+        assertThat(toString(q), not(is(toString(q))));
+    }
+
+    private String toString(RandomizedQueue<Integer> list){
+        StringBuilder sb = new StringBuilder();
+        for(Integer item: list){
+            sb.append(item);
+        }
+        return sb.toString();
+    }
+
     private RandomizedQueue<Integer> fromList(List<Integer> list) {
         RandomizedQueue<Integer> queue = new RandomizedQueue<Integer>();
         for (Integer item : list) {

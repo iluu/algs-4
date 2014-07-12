@@ -39,15 +39,11 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
             throw new NullPointerException("Item can't be null");
         }
 
-        int position = getRandomPosition();
-        insertAtPosition(position, item);
-    }
-
-    private int getRandomPosition() {
-        if (isEmpty()) {
-            return 0;
-        }
-        return StdRandom.uniform(size);
+        Node newNode = new Node(item);
+        Node oldNextNode = first.after;
+        first.after = newNode;
+        newNode.after = oldNextNode;
+        size++;
     }
 
     private Node getNodeAtPosition(int position) {
@@ -58,15 +54,6 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
             currentPosition++;
         }
         return currentNode;
-    }
-
-    private void insertAtPosition(int position, Item item) {
-        Node currentNode = getNodeAtPosition(position);
-        Node newNode = new Node(item);
-        Node oldNextNode = currentNode.after;
-        currentNode.after = newNode;
-        newNode.after = oldNextNode;
-        size++;
     }
 
     /**
@@ -122,15 +109,24 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
     }
 
     private class RandomizedQueueIterator implements Iterator<Item> {
-        private Node currentNode;
+        private Item[] items;
+        private int currentIdx;
 
         RandomizedQueueIterator() {
-            currentNode = first;
+            items = (Item[]) new Object[size];
+            Node currentNode = first.after;
+            for (int i = 0; i < size; i++) {
+                items[i] = currentNode.value;
+                currentNode = currentNode.after;
+            }
+
+            StdRandom.shuffle(items);
+            currentIdx = 0;
         }
 
         @Override
         public boolean hasNext() {
-            return currentNode.after != last;
+            return currentIdx < size;
         }
 
         @Override
@@ -139,8 +135,7 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
                 throw new NoSuchElementException();
             }
 
-            currentNode = currentNode.after;
-            return currentNode.value;
+            return items[currentIdx++];
         }
 
         @Override
