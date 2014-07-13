@@ -3,18 +3,14 @@ import java.util.NoSuchElementException;
 
 public class RandomizedQueue<Item> implements Iterable<Item> {
 
-    private Node first;
-    private Node last;
-
+    private Item[] items;
     private int size;
 
     /**
      * Construct an empty randomized queue
      */
     public RandomizedQueue() {
-        first = new Node();
-        last = new Node();
-        first.after = last;
+        items = (Item[]) new Object[2];
     }
 
     /**
@@ -38,22 +34,16 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
         if (item == null) {
             throw new NullPointerException("Item can't be null");
         }
-
-        Node newNode = new Node(item);
-        Node oldNextNode = first.after;
-        first.after = newNode;
-        newNode.after = oldNextNode;
-        size++;
+        if (size == items.length) resize(2 * items.length);
+        items[size++] = item;
     }
 
-    private Node getNodeAtPosition(int position) {
-        int currentPosition = 0;
-        Node currentNode = first;
-        while (currentPosition < position) {
-            currentNode = currentNode.after;
-            currentPosition++;
+    private void resize(int max) {
+        Item[] temp = (Item[]) new Object[max];
+        for (int i = 0; i < size; i++) {
+            temp[i] = items[i];
         }
-        return currentNode;
+        items = temp;
     }
 
     /**
@@ -65,15 +55,17 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
         }
 
         int randomPosition = StdRandom.uniform(size);
-        return removeNodeAtPosition(randomPosition);
-    }
+        Item value = items[randomPosition];
 
-    private Item removeNodeAtPosition(int position) {
-        Node oneBefore = getNodeAtPosition(position - 1);
-        Node nodeToRemove = oneBefore.after;
-        oneBefore.after = nodeToRemove.after;
+        items[randomPosition] = items[size];
+        items[size] = null;
         size--;
-        return nodeToRemove.value;
+
+        if (size > 0 && size == items.length / 4) {
+            resize(items.length / 2);
+        }
+
+        return value;
     }
 
     /**
@@ -84,8 +76,8 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
             throw new NoSuchElementException();
         }
 
-        int position = StdRandom.uniform(1, size + 1);
-        return getNodeAtPosition(position).value;
+        int position = StdRandom.uniform(size);
+        return items[position];
     }
 
     /**
@@ -96,31 +88,17 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
         return new RandomizedQueueIterator();
     }
 
-    private class Node {
-        private Node after;
-        private Item value;
-
-        Node() {
-        }
-
-        Node(Item val) {
-            value = val;
-        }
-    }
-
     private class RandomizedQueueIterator implements Iterator<Item> {
-        private Item[] items;
+        private Item[] iterItems;
         private int currentIdx;
 
         RandomizedQueueIterator() {
-            items = (Item[]) new Object[size];
-            Node currentNode = first.after;
+            iterItems = (Item[]) new Object[size];
             for (int i = 0; i < size; i++) {
-                items[i] = currentNode.value;
-                currentNode = currentNode.after;
+                iterItems[i] = items[i];
             }
 
-            StdRandom.shuffle(items);
+            StdRandom.shuffle(iterItems);
             currentIdx = 0;
         }
 
@@ -135,7 +113,7 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
                 throw new NoSuchElementException();
             }
 
-            return items[currentIdx++];
+            return iterItems[currentIdx++];
         }
 
         @Override
