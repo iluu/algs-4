@@ -70,7 +70,6 @@ public class RandomizedQueueTest {
     public void dequeueRemovesRandomItems() {
         RandomizedQueue<Integer> queue = fromList(Arrays.asList(1, 2, 3, 4, 5));
         Integer removed = queue.dequeue();
-
         assertThat(queue.size(), is(4));
         assertThat(toList(queue), not(hasItem(removed)));
     }

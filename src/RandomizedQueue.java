@@ -57,9 +57,9 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
         int randomPosition = StdRandom.uniform(size);
         Item value = items[randomPosition];
 
+        size--;
         items[randomPosition] = items[size];
         items[size] = null;
-        size--;
 
         if (size > 0 && size == items.length / 4) {
             resize(items.length / 2);
