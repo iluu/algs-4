@@ -1,3 +1,5 @@
+import edu.princeton.cs.algs4.WeightedQuickUnionUF;
+
 public class Percolation {
 
     private boolean percolates;
@@ -6,45 +8,39 @@ public class Percolation {
     private boolean[] connectedToBottom;
     private WeightedQuickUnionUF quickUnion;
 
-    /**
-     * Create N by B grid, with all sites blocked
-     */
-    public Percolation(int N) {
-        if (N <= 0) {
+    public Percolation(int n) {
+        if (n <= 0) {
             throw new IllegalArgumentException("N must be > 0");
         }
 
-        dimenN = N;
-        openSites = new boolean[(N + 1) * (N + 1)];
-        quickUnion = new WeightedQuickUnionUF((N + 1) * (N + 1));
-        connectedToBottom = new boolean[(N + 1) * (N + 1)];
+        dimenN = n;
+        openSites = new boolean[(n + 1) * (n + 1)];
+        quickUnion = new WeightedQuickUnionUF((n + 1) * (n + 1));
+        connectedToBottom = new boolean[(n + 1) * (n + 1)];
     }
 
     /**
-     * Open site at i, j if it is not already open
-     *
-     * @param x row
-     * @param y column
+     * Open site (row, col) if it is not already open
      */
-    public void open(int x, int y) {
-        if (!isValid(x, y)) {
-            throw new IndexOutOfBoundsException(x + ", or " + y + " > " + dimenN);
+    public void open(int row, int col) {
+        if (!isValid(row, col)) {
+            throw new IndexOutOfBoundsException(row + ", or " + col + " > " + dimenN);
         }
 
-        int siteId = xyTo1D(x, y);
+        int siteId = xyTo1D(row, col);
         openSites[siteId] = true;
 
-        if (isFirstRow(x)) {
+        if (isFirstRow(row)) {
             quickUnion.union(siteId, 0);
         }
 
         // neighbours
-        fillNeighbour(siteId, x - 1, y);
-        fillNeighbour(siteId, x + 1, y);
-        fillNeighbour(siteId, x, y + 1);
-        fillNeighbour(siteId, x, y - 1);
+        fillNeighbour(siteId, row - 1, col);
+        fillNeighbour(siteId, row + 1, col);
+        fillNeighbour(siteId, row, col + 1);
+        fillNeighbour(siteId, row, col - 1);
 
-        if (isLastRow(x)) {
+        if (isLastRow(row)) {
             connectToBottom(siteId);
         }
 
@@ -73,44 +69,55 @@ public class Percolation {
         return connectedToBottom[quickUnion.find(siteId)];
     }
 
-    private boolean isLastRow(int x) {
-        return x == dimenN;
+    private boolean isLastRow(int row) {
+        return row == dimenN;
     }
 
-    private boolean isFirstRow(int x) {
-        return x == 1;
+    private boolean isFirstRow(int row) {
+        return row == 1;
     }
 
-    private int xyTo1D(int x, int y) {
-        return (x - 1) + (y - 1) * dimenN + 1;
+    private int xyTo1D(int row, int col) {
+        return (row - 1) + (col - 1) * dimenN + 1;
     }
 
-    private boolean isValid(int x, int y) {
-        return x <= dimenN && x >= 1 && y <= dimenN && y >= 1;
-    }
-
-    /**
-     * @return true if site at x, y is open, false otherwise
-     */
-    public boolean isOpen(int x, int y) {
-        if (!isValid(x, y)) {
-            throw new IndexOutOfBoundsException(x + ", or " + y + " > " + dimenN);
-        }
-
-        return openSites[xyTo1D(x, y)];
+    private boolean isValid(int row, int col) {
+        return row <= dimenN && row >= 1 && col <= dimenN && col >= 1;
     }
 
     /**
-     * Full site is a site, that can be connected to the top row
-     *
-     * @return true if site at i, j is full, false otherwise
+     * @return true if site at row, col is open, false otherwise
      */
-    public boolean isFull(int x, int y) {
-        if (!isValid(x, y)) {
-            throw new IndexOutOfBoundsException(x + ", or " + y + " > " + dimenN);
+    public boolean isOpen(int row, int col) {
+        if (!isValid(row, col)) {
+            throw new IndexOutOfBoundsException(row + ", or " + col + " > " + dimenN);
         }
 
-        return quickUnion.connected(xyTo1D(x, y), 0);
+        return openSites[xyTo1D(row, col)];
+    }
+
+    /**
+     * @return true if site at row, col is full, false otherwise
+     */
+    public boolean isFull(int row, int col) {
+        if (!isValid(row, col)) {
+            throw new IndexOutOfBoundsException(row + ", or " + col + " > " + dimenN);
+        }
+
+        return quickUnion.connected(xyTo1D(row, col), 0);
+    }
+
+    /**
+     * @return number of open sites
+     */
+    public int numberOfOpenSites() {
+        int result = 0;
+        for (boolean openSite : openSites) {
+            if (openSite) {
+                result++;
+            }
+        }
+        return result;
     }
 
     /**

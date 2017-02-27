@@ -1,3 +1,7 @@
+import edu.princeton.cs.algs4.StdOut;
+import edu.princeton.cs.algs4.StdRandom;
+import edu.princeton.cs.algs4.StdStats;
+
 public class PercolationStats {
 
     private int dimen;
@@ -5,19 +9,16 @@ public class PercolationStats {
     private double[] results;
 
     /**
-     * Perform T independent computational experiments on an N-by-N grid
-     *
-     * @param N dimensions of the array
-     * @param T number of experiments to run
+     * Perform trials independent experiments on an n-by-n grid
      */
-    public PercolationStats(int N, int T) {
-        if (N <= 0 || T <= 0) {
+    public PercolationStats(int n, int trials) {
+        if (n <= 0 || trials <= 0) {
             throw new IllegalArgumentException("Try again: N <= 0 and T <= 0");
         }
 
-        dimen = N;
-        experiments = T;
-        results = new double[T];
+        dimen = n;
+        experiments = trials;
+        results = new double[trials];
         runExperiments();
     }
 
@@ -53,10 +54,10 @@ public class PercolationStats {
      * Test client
      */
     public static void main(String[] args) {
-        int N = Integer.parseInt(args[0]);
-        int T = Integer.parseInt(args[1]);
+        int n = Integer.parseInt(args[0]);
+        int trials = Integer.parseInt(args[1]);
 
-        PercolationStats stats = new PercolationStats(N, T);
+        PercolationStats stats = new PercolationStats(n, trials);
 
         StdOut.printf("mean                    %.20f\n", stats.mean());
         StdOut.printf("stddev                  %.20f\n", stats.stddev());
