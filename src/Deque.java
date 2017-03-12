@@ -23,14 +23,14 @@ public class Deque<Item> implements Iterable<Item> {
     }
 
     /**
-     * @return number of items in the deque
+     * @return number of items on the deque
      */
     public int size() {
         return size;
     }
 
     /**
-     * Insert the item at the front
+     * Add the item at the front
      */
     public void addFirst(Item item) {
         if (item == null) {
@@ -50,7 +50,7 @@ public class Deque<Item> implements Iterable<Item> {
     }
 
     /**
-     * Insert the item at the end
+     * Add the item at the end
      */
     public void addLast(Item item) {
         if (item == null) {
@@ -71,7 +71,7 @@ public class Deque<Item> implements Iterable<Item> {
     }
 
     /**
-     * Delete and return the item at the front
+     * Remove and return the item from the front
      */
     public Item removeFirst() {
         if (isEmpty()) {

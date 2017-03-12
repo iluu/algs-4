@@ -1,3 +1,5 @@
+import edu.princeton.cs.algs4.StdRandom;
+
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
@@ -21,14 +23,14 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
     }
 
     /**
-     * @return number of items in the deque
+     * @return number of items in the queue
      */
     public int size() {
         return size;
     }
 
     /**
-     * Add items
+     * Add the item
      */
     public void enqueue(Item item) {
         if (item == null) {
@@ -40,14 +42,12 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
 
     private void resize(int max) {
         Item[] temp = (Item[]) new Object[max];
-        for (int i = 0; i < size; i++) {
-            temp[i] = items[i];
-        }
+        System.arraycopy(items, 0, temp, 0, size);
         items = temp;
     }
 
     /**
-     * Delete and return random item
+     * Remove and return random item
      */
     public Item dequeue() {
         if (isEmpty()) {
@@ -69,7 +69,7 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
     }
 
     /**
-     * return (but do not delete) a random item
+     * return (but do not remove) a random item
      */
     public Item sample() {
         if (isEmpty()) {
