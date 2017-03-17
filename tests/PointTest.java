@@ -58,7 +58,7 @@ public class PointTest {
     }
 
     @Test
-    public void slopeToForHorizontalLineIsZero() {
+    public void slopeToForVerticalLineIsZero() {
         Point point1 = new Point(1, 1);
         Point point2 = new Point(2, 1);
 
@@ -70,7 +70,7 @@ public class PointTest {
     }
 
     @Test
-    public void slopeToForVerticalLineIsPositiveInfinity() {
+    public void slopeToForHorizontalLineIsPositiveInfinity() {
         Point point1 = new Point(1, 1);
         Point point2 = new Point(1, 2);
 
@@ -103,7 +103,7 @@ public class PointTest {
                 new Point(14000, 10000)
         };
 
-        Arrays.sort(points, points[0].SLOPE_ORDER);
+        Arrays.sort(points, points[0].slopeOrder());
         assertTrue(points[0].slopeTo(points[5]) < (points[0].slopeTo(points[6])));
     }
 }
